@@ -6,7 +6,11 @@
 # -----------------------------------------------------------------------------
 # Section identical to the root clippy.toml:
 
+<<<<<<< HEAD
 msrv = "1.77"
+=======
+msrv = "1.84"
+>>>>>>> upstream/master
 
 allow-unwrap-in-tests = true
 
@@ -47,6 +51,9 @@ doc-valid-idents = [
   # You must also update the same list in the root `clippy.toml`!
   "AccessKit",
   "WebGL",
+  "WebGL1",
+  "WebGL2",
   "WebGPU",
+  "VirtualBox",
   "..",
 ]

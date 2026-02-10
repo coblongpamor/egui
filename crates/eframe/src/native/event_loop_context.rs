@@ -14,7 +14,7 @@ impl EventLoopGuard {
                 cell.get().is_none(),
                 "Attempted to set a new event loop while one is already set"
             );
-            cell.set(Some(event_loop as *const ActiveEventLoop));
+            cell.set(Some(std::ptr::from_ref::<ActiveEventLoop>(event_loop)));
         });
         Self
     }
@@ -27,7 +27,7 @@ impl Drop for EventLoopGuard {
 }
 
 // Helper function to safely use the current event loop
-#[allow(unsafe_code)]
+#[expect(unsafe_code)]
 pub fn with_current_event_loop<F, R>(f: F) -> Option<R>
 where
     F: FnOnce(&ActiveEventLoop) -> R,

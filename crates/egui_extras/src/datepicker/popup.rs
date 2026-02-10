@@ -1,4 +1,4 @@
-use chrono::{Datelike, NaiveDate, Weekday};
+use chrono::{Datelike as _, NaiveDate, Weekday};
 
 use egui::{Align, Button, Color32, ComboBox, Direction, Id, Layout, RichText, Ui, Vec2};
 
@@ -37,7 +37,7 @@ pub(crate) struct DatePickerPopup<'a> {
     pub highlight_weekends: bool,
 }
 
-impl<'a> DatePickerPopup<'a> {
+impl DatePickerPopup<'_> {
     /// Returns `true` if user pressed `Save` button.
     pub fn draw(&mut self, ui: &mut Ui) -> bool {
         let id = ui.make_persistent_id("date_picker");

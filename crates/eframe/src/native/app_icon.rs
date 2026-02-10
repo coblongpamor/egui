@@ -47,7 +47,7 @@ enum AppIconStatus {
     NotSetTryAgain,
 
     /// We successfully set the icon and it should be visible now.
-    #[allow(dead_code)] // Not used on Linux
+    #[allow(dead_code, clippy::allow_attributes)] // Not used on Linux
     Set,
 }
 
@@ -59,7 +59,7 @@ enum AppIconStatus {
 /// Since window creation can be lazy, call this every frame until it's either successfully or gave up.
 /// (See [`AppIconStatus`])
 fn set_title_and_icon(_title: &str, _icon_data: Option<&IconData>) -> AppIconStatus {
-    crate::profile_function!();
+    profiling::function_scope!();
 
     #[cfg(target_os = "windows")]
     {
@@ -71,13 +71,13 @@ fn set_title_and_icon(_title: &str, _icon_data: Option<&IconData>) -> AppIconSta
     #[cfg(target_os = "macos")]
     return set_title_and_icon_mac(_title, _icon_data);
 
-    #[allow(unreachable_code)]
+    #[allow(unreachable_code, clippy::allow_attributes)]
     AppIconStatus::NotSetIgnored
 }
 
 /// Set icon for Windows applications.
 #[cfg(target_os = "windows")]
-#[allow(unsafe_code)]
+#[expect(unsafe_code)]
 fn set_app_icon_windows(icon_data: &IconData) -> AppIconStatus {
     use crate::icon_data::IconDataExt as _;
     use winapi::um::winuser;
@@ -198,12 +198,12 @@ fn set_app_icon_windows(icon_data: &IconData) -> AppIconStatus {
 
 /// Set icon & app title for `MacOS` applications.
 #[cfg(target_os = "macos")]
-#[allow(unsafe_code)]
+#[expect(unsafe_code)]
 fn set_title_and_icon_mac(title: &str, icon_data: Option<&IconData>) -> AppIconStatus {
     use crate::icon_data::IconDataExt as _;
-    crate::profile_function!();
+    profiling::function_scope!();
 
-    use objc2::ClassType;
+    use objc2::ClassType as _;
     use objc2_app_kit::{NSApplication, NSImage};
     use objc2_foundation::{NSData, NSString};
 
@@ -237,7 +237,7 @@ fn set_title_and_icon_mac(title: &str, icon_data: Option<&IconData>) -> AppIconS
             log::trace!("NSImage::initWithData…");
             let app_icon = NSImage::initWithData(NSImage::alloc(), &data);
 
-            crate::profile_scope!("setApplicationIconImage_");
+            profiling::scope!("setApplicationIconImage_");
             log::trace!("setApplicationIconImage…");
             app.setApplicationIconImage(app_icon.as_deref());
         }
@@ -246,7 +246,7 @@ fn set_title_and_icon_mac(title: &str, icon_data: Option<&IconData>) -> AppIconS
         if let Some(main_menu) = app.mainMenu() {
             if let Some(item) = main_menu.itemAtIndex(0) {
                 if let Some(app_menu) = item.submenu() {
-                    crate::profile_scope!("setTitle_");
+                    profiling::scope!("setTitle_");
                     app_menu.setTitle(&NSString::from_str(title));
                 }
             }

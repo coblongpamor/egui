@@ -31,7 +31,7 @@ fn main() -> eframe::Result {
 struct MyApp {
     keep_repainting: bool,
 
-    // It is useful to be able t oinspect how eframe acts with multiple viewport
+    // It is useful to be able to inspect how eframe acts with multiple viewport
     // so we have two viewports here that we can toggle on/off.
     show_immediate_viewport: bool,
     show_deferred_viewport: Arc<AtomicBool>,
@@ -165,7 +165,7 @@ fn start_puffin_server() {
 
             // We can store the server if we want, but in this case we just want
             // it to keep running. Dropping it closes the server, so let's not drop it!
-            #[allow(clippy::mem_forget)]
+            #[expect(clippy::mem_forget)]
             std::mem::forget(puffin_server);
         }
         Err(err) => {

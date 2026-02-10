@@ -1,4 +1,6 @@
-use crate::{NumExt, Response, Sense, TextStyle, Ui, Widget, WidgetInfo, WidgetText, WidgetType};
+use crate::{
+    NumExt as _, Response, Sense, TextStyle, Ui, Widget, WidgetInfo, WidgetText, WidgetType,
+};
 
 /// One out of several alternatives, either selected or not.
 /// Will mark selected items with a different background color.
@@ -71,9 +73,10 @@ impl Widget for SelectableLabel {
 
                 ui.painter().rect(
                     rect,
-                    visuals.rounding,
+                    visuals.corner_radius,
                     visuals.weak_bg_fill,
                     visuals.bg_stroke,
+                    epaint::StrokeKind::Inside,
                 );
             }
 
